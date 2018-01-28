@@ -20,15 +20,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.antest1.kcasniffer.KcaConstants.PACKETSTORE_VERSION;
 import static com.antest1.kcasniffer.KcaUtils.joinStr;
 
 public class KcaDataService extends Service {
     Handler handler;
+    KcaPacketStore packet_db;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(getApplicationContext(), "RUN", Toast.LENGTH_LONG).show();
         handler = new KcaDataServiceHandler(this);
+        packet_db = new KcaPacketStore(getApplicationContext(), null, PACKETSTORE_VERSION);
         KcaVpnData.setHandler(handler);
         return super.onStartCommand(intent, flags, startId);
     }
@@ -75,6 +78,8 @@ public class KcaDataService extends Service {
             if (raw.length > 0) response = new JsonParser().parse(data).getAsJsonObject();
             Toast.makeText(getApplicationContext(), String.valueOf(request.length()) +
                     " " + String.valueOf(response.toString().length()), Toast.LENGTH_LONG).show();
+            packet_db.record(url, request, response.toString());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
