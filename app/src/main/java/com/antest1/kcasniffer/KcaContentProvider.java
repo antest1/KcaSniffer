@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import static android.provider.Contacts.SettingsColumns.KEY;
 import static com.antest1.kcasniffer.KcaConstants.AUTHORITY;
 import static com.antest1.kcasniffer.KcaConstants.PACKETSTORE_VERSION;
 import static com.antest1.kcasniffer.KcaConstants.PATH;
