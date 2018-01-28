@@ -41,13 +41,18 @@ public class KcaPacketStore extends SQLiteOpenHelper {
 
     public void record(String url, String request, String response) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        // insert value to db
         ContentValues values = new ContentValues();
         values.put("URL", url);
         values.put("REQUEST", request);
         values.put("RESPONSE", response);
         values.put("TIMESTAMP", System.currentTimeMillis());
         db.insert(table_name, null, values);
-        db.execSQL("DELETE FROM " + table_name + " ORDER BY KEY DESC LIMIT -1 OFFSET ".concat(String.valueOf(limit)));
+
+        // remove older rows
+        db.delete(table_name, "ROWID NOT IN (SELECT ROWID FROM " + table_name +
+                " ORDER BY KEY DESC LIMIT " + String.valueOf(limit) + ")", null);
     }
 
     public JsonObject getRecentData() {

@@ -1,6 +1,7 @@
 package com.antest1.kcasniffer;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.antest1.kcasniffer.KcaConstants.BROADCAST_ACTION;
 import static com.antest1.kcasniffer.KcaConstants.PACKETSTORE_VERSION;
 import static com.antest1.kcasniffer.KcaUtils.joinStr;
 
@@ -76,12 +78,15 @@ public class KcaDataService extends Service {
                 data.skip("svdata=".length());
             }
             if (raw.length > 0) response = new JsonParser().parse(data).getAsJsonObject();
-            Toast.makeText(getApplicationContext(), String.valueOf(request.length()) +
-                    " " + String.valueOf(response.toString().length()), Toast.LENGTH_LONG).show();
+            // Toast.makeText(getApplicationContext(), String.valueOf(request.length()) +
+            //        " " + String.valueOf(response.toString().length()), Toast.LENGTH_LONG).show();
             packet_db.record(url, request, response.toString());
-
+            Intent intent = new Intent();
+            intent.setAction(BROADCAST_ACTION);
+            sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), KcaUtils.getStringFromException(e), Toast.LENGTH_LONG).show();
         }
     }
 
