@@ -22,9 +22,14 @@ Requirement
 - Supporting Android VPN service
 - Warning: Kcanotify may not work for specific devices(vendor-dependent issue) and old devices(Android 4.x).
 
+Download
+-------
+[Github Releases](https://github.com/antest1/KcaSniffer/releases)
+
 Specification
 -------
-The specification for retrieve kancolle data will be available soon.
+The specification is available [here](specification.md).
+You can use this application with your own project!
 
 Attribution
 -------
@@ -34,7 +39,7 @@ The license for NetGuard is [GNU General Public License version 3](http://www.gn
 
 Contact
 -------
-For suggestion or error report, make an [Issue](https://github.com/antest1/KcaSniffer/issues) or mail to me.  
+For question, suggestion and error report, make an [Issue](https://github.com/antest1/KcaSniffer/issues) or mail to me.  
 E-mail: kcanotify@gmail.com
 
 License
