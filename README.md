@@ -22,9 +22,10 @@ Requirement
 - Supporting Android VPN service
 - Warning: Kcanotify may not work for specific devices(vendor-dependent issue) and old devices(Android 4.x).
 
-Download
+Download & How to use
 -------
-[Github Releases](https://github.com/antest1/KcaSniffer/releases)
+You can download it at [Github Releases](https://github.com/antest1/KcaSniffer/releases)  
+Just click the button on the screen, Press OK in the dialog at first. That's all.
 
 Specification
 -------
