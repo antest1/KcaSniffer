@@ -8,7 +8,7 @@ model {
             minSdkVersion.apiLevel 16
             targetSdkVersion.apiLevel 26
             versionCode 1
-            versionName "1.0"
+            versionName "1.0-rc1"
             archivesBaseName = "kcasniffer_" + versionName
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
