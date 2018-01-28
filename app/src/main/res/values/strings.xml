@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">KcaSniffer</string>
+    <string name="app_vpn_name">KcaSniffer VPN</string>
+
+    <string name="ma_vpn_toggleon">Sniffer On</string>
+    <string name="ma_vpn_toggleoff">Sniffer Off</string>
+    <string name="ma_svc_toggleon">Service On</string>
+    <string name="ma_svc_toggleoff">Service Off</string>
+</resources>
