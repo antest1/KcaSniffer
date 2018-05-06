@@ -20,7 +20,7 @@ Requirement
 -------
 - Android 4.1(JellyBean) or later
 - Supporting Android VPN service
-- Warning: Kcanotify may not work for specific devices(vendor-dependent issue) and old devices(Android 4.x).
+- Warning: KcaSniffer may not work for specific devices(vendor-dependent issue) and old devices(Android 4.x).
 
 Download & How to use
 -------
