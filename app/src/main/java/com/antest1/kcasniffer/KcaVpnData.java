@@ -97,7 +97,9 @@ public class KcaVpnData {
                     state = REQUEST;
                     portToRequestData.put(sport, new StringBuilder());
                 }
-                portToRequestData.get(sport).append(s);
+                if (portToRequestData.get(sport) == null) return;
+                else portToRequestData.get(sport).append(s);
+
                 if(!isRequestUriReady && portToRequestData.get(sport).toString().contains("HTTP/1.1")) {
                     isRequestUriReady = true;
                     String[] head_line = portToRequestData.get(sport).toString().split("\r\n");
@@ -156,7 +158,8 @@ public class KcaVpnData {
 
                 boolean chunkflag = (portToLength.get(tport) == -1);
                 boolean gzipflag = portToGzipped.get(tport);
-                Byte[] responsePrevData = portToResponseData.get(tport);
+                Byte[] empty = {};
+                Byte[] responsePrevData = portToResponseData.get(tport, empty);
                 portToResponseData.put(tport, ArrayUtils.toObject(Bytes.concat(ArrayUtils.toPrimitive(responsePrevData), data)));
                 if (portToLength.get(tport) == -1 && isChunkEnd(ArrayUtils.toPrimitive(portToResponseData.get(tport)))) {
                     isreadyflag = true;
@@ -199,22 +202,6 @@ public class KcaVpnData {
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("KCA", getStringFromException(e));
-            /*
-            String error_uri = KCA_API_VPN_DATA_ERROR;
-            String empty_request = "";
-            JsonObject error_data = new JsonObject();
-            error_data.addProperty("error", getStringFromException(e));
-            error_data.addProperty("uri", requestUri);
-            error_data.addProperty("request", requestData.toString());
-            String responseDataStr = byteArrayToHex(responseData);
-            if (responseDataStr.length() > 240) {
-                error_data.addProperty("response", responseDataStr.substring(0, 240));
-            } else {
-                error_data.addProperty("response", responseDataStr);
-            }
-            KcaHandler k = new KcaHandler(handler, error_uri, empty_request.getBytes(), error_data.toString().getBytes());
-            executorService.execute(k);
-            */
         }
     }
 
