@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import static com.antest1.kcasniffer.KcaConstants.PREF_VPN_ENABLED;
+import static com.antest1.kcasniffer.KcaConstants.VPN_STOP_REASON;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_VPN = 1;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("KCA", ex.toString() + "\n" + Log.getStackTraceString(ex));
                     }
                 } else {
-                    KcaVpnService.stop("switch off", MainActivity.this);
+                    KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                 }
             }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
@@ -45,7 +46,9 @@ import eu.faircode.netguard.ResourceRecord;
 import eu.faircode.netguard.Rule;
 import eu.faircode.netguard.Util;
 
+import static com.antest1.kcasniffer.KcaConstants.KC_PACKAGE_NAME;
 import static com.antest1.kcasniffer.KcaConstants.PREF_VPN_ENABLED;
+import static com.antest1.kcasniffer.KcaConstants.VPN_STOP_REASON;
 
 public class KcaVpnService extends VpnService {
     private final static String TAG = "KCAV";
@@ -323,6 +326,11 @@ public class KcaVpnService extends VpnService {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean enabled = prefs.getBoolean(PREF_VPN_ENABLED, false);
 
+        if (intent != null && intent.hasExtra(EXTRA_REASON)) {
+            String reason = intent.getStringExtra(EXTRA_REASON);
+            if (reason.equals(VPN_STOP_REASON)) stopSelf();
+        }
+
         if (intent == null) {
             Log.i(TAG, "Restart");
 
@@ -386,6 +394,14 @@ public class KcaVpnService extends VpnService {
         // Build VPN service
         Builder builder = new Builder();
         builder.setSession(getString(R.string.app_vpn_name));
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            try {
+                builder.addAllowedApplication(KC_PACKAGE_NAME);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
         // VPN address
         String vpn4 = prefs.getString("vpn4", "10.1.10.1");
