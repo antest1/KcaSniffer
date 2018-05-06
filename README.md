@@ -1,6 +1,6 @@
 # KcaSniffer
 
-<img src="https://upload.cc/i/lf5Vup.png" width="256"/>
+<img src="https://upload.cc/i1/2018/05/07/fMQrXm.png" width="256"/>
 VpnService-based Common Sniffer Tool for Kancolle Android
 
 About Project
@@ -37,6 +37,7 @@ Attribution
 - This project uses the modified source code of [NetGuard](https://github.com/M66B/NetGuard/) for capturing the traffic of Kancolle application.   
 The license for NetGuard is [GNU General Public License version 3](http://www.gnu.org/licenses/gpl.txt).
 - Many parts of the source code is from [Kcanotify](https://github.com/antest1/kcanotify).
+- Icon image is drawn by [なむちん](https://www.pixiv.net/member.php?id=23154187).
 
 Contact
 -------
