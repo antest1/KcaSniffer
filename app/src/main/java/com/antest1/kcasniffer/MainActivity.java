@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                    Intent dsIntent = new Intent(getApplicationContext(), KcaDataService.class);
+                    stopService(dsIntent);
                 }
                 Intent toggleIntent = new Intent(getApplicationContext(), KcaSnifferWidget.class);
                 toggleIntent.setAction(WIDGET_SET_ACTION);

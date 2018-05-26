@@ -78,16 +78,17 @@ public class KcaSnifferWidget extends AppWidgetProvider {
         }
 
         if (WIDGET_TOGGLE_ACTION.equals(action)) {
+            Intent dsIntent = new Intent(context, KcaDataService.class);
             if (sniffer_status) {
                 KcaVpnService.stop(VPN_STOP_REASON, context);
                 prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                context.stopService(dsIntent);
                 Toast.makeText(context, context.getString(R.string.ma_vpn_toggleoff).toUpperCase(), Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     final Intent prepare = VpnService.prepare(context);
                     if (prepare == null) {
                         KcaVpnService.start("prepared", context);
-                        Intent dsIntent = new Intent(context, KcaDataService.class);
                         context.startService(dsIntent);
                         prefs.edit().putBoolean(PREF_VPN_ENABLED, true).apply();
                     } else {
