@@ -49,7 +49,9 @@ import eu.faircode.netguard.Util;
 
 import static com.antest1.kcasniffer.KcaConstants.DMMLOGIN_PACKAGE_NAME;
 import static com.antest1.kcasniffer.KcaConstants.KC_PACKAGE_NAME;
+import static com.antest1.kcasniffer.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcasniffer.KcaConstants.VPN_STOP_REASON;
+import static com.antest1.kcasniffer.KcaConstants.WIDGET_SET_ACTION;
 
 public class KcaVpnService extends VpnService {
     private final static String TAG = "KCAV";
@@ -216,7 +218,8 @@ public class KcaVpnService extends VpnService {
                         // Retried on connectivity change
                     } else {
                         //
-                        prefs.edit().putBoolean("enabled", false).apply();
+                        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                        broadcastWidget(getApplicationContext());
                     }
                 } else {
                     Log.w(TAG, ex.toString());
@@ -325,7 +328,7 @@ public class KcaVpnService extends VpnService {
         //getLock(this).acquire();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean enabled = prefs.getBoolean("enabled", false);
+        boolean enabled = prefs.getBoolean(PREF_VPN_ENABLED, false);
 
         if (intent != null && intent.hasExtra(EXTRA_REASON)) {
             String reason = intent.getStringExtra(EXTRA_REASON);
@@ -379,7 +382,8 @@ public class KcaVpnService extends VpnService {
     public void onRevoke() {
         Log.i(TAG, "Revoke");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean("enabled", false).apply();
+        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+        broadcastWidget(getApplicationContext());
         super.onRevoke();
     }
 
@@ -630,7 +634,8 @@ public class KcaVpnService extends VpnService {
             Log.e(TAG, reason);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            prefs.edit().putBoolean("enabled", false).apply();
+            prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+            broadcastWidget(getApplicationContext());
         }
     }
 
@@ -722,6 +727,7 @@ public class KcaVpnService extends VpnService {
     };
 
     public static void start(String reason, Context context) {
+        broadcastWidget(context);
         Intent intent = new Intent(context, KcaVpnService.class);
         intent.putExtra(EXTRA_COMMAND, Command.start);
         intent.putExtra(EXTRA_REASON, reason);
@@ -729,6 +735,7 @@ public class KcaVpnService extends VpnService {
     }
 
     public static void stop(String reason, Context context) {
+        broadcastWidget(context);
         Intent intent = new Intent(context, KcaVpnService.class);
         intent.putExtra(EXTRA_COMMAND, Command.stop);
         intent.putExtra(EXTRA_REASON, reason);
@@ -736,13 +743,22 @@ public class KcaVpnService extends VpnService {
     }
 
     public static void reload(String reason, Context context) {
+        broadcastWidget(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.getBoolean("enabled", false)) {
+        if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
             Intent intent = new Intent(context, KcaVpnService.class);
             intent.putExtra(EXTRA_COMMAND, Command.reload);
             intent.putExtra(EXTRA_REASON, reason);
             context.startService(intent);
         }
+    }
+
+    public static void broadcastWidget(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean is_enabled = prefs.getBoolean(PREF_VPN_ENABLED, false);
+        Intent toggleIntent = new Intent(context, KcaSnifferWidget.class);
+        toggleIntent.setAction(WIDGET_SET_ACTION);
+        context.sendBroadcast(toggleIntent);
     }
 
     static {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth = "40dp"
+    android:minHeight = "40dp"
+    android:previewImage="@mipmap/ic_widget_on"
+    android:initialLayout="@layout/widget_btn_on"
+    android:widgetCategory="home_screen"
+    >
+</appwidget-provider>

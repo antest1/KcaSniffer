@@ -1,5 +1,6 @@
 package com.antest1.kcasniffer;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.VpnService;
@@ -17,6 +18,8 @@ import android.widget.ToggleButton;
 
 import static com.antest1.kcasniffer.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcasniffer.KcaConstants.VPN_STOP_REASON;
+import static com.antest1.kcasniffer.KcaConstants.WIDGET_SET_ACTION;
+import static com.antest1.kcasniffer.KcaConstants.WIDGET_TOGGLE_ACTION;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_VPN = 1;
@@ -58,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
                     KcaVpnService.stop(VPN_STOP_REASON, MainActivity.this);
                     prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
                 }
+                Intent toggleIntent = new Intent(getApplicationContext(), KcaSnifferWidget.class);
+                toggleIntent.setAction(WIDGET_SET_ACTION);
+                sendBroadcast(toggleIntent);
             }
         });
     }

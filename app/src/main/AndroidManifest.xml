@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.antest1.kcasniffer">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -21,18 +22,17 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.antest1.kcasniffer.NetworkSettingActivity">
+        <activity android:name=".NetworkSettingActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.antest1.kcasniffer.MainActivity" />
         </activity>
 
-        <service
-            android:name=".KcaDataService" />
+        <service android:name=".KcaDataService" />
         <service
             android:name=".KcaVpnService"
             android:label="@string/app_vpn_name"
@@ -42,12 +42,26 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name=".KcaSnifferWidget"
+            android:label="Sniffer Switch">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_config" />
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.antest1.kcasniffer.widget.ACTION_SET" />
+                <action android:name="com.antest1.kcasniffer.widget.ACTION_TOGGLE" />
+            </intent-filter>
+        </receiver>
+
         <provider
-            android:name="KcaContentProvider"
+            android:name=".KcaContentProvider"
             android:authorities="com.antest1.kcasniffer.contentprovider"
+            android:exported="true"
             android:grantUriPermissions="true"
-            android:readPermission="com.antest1.kcasniffer.contentprovider.READ_DATA"
-            android:exported="true" />
+            android:readPermission="com.antest1.kcasniffer.contentprovider.READ_DATA" />
     </application>
 
 </manifest>

@@ -14,6 +14,8 @@ public class KcaConstants {
     public static final String PATH  = "/request";
 
     public static final String BROADCAST_ACTION = "com.antest1.kcasniffer.broadcast";
+    public static final String WIDGET_TOGGLE_ACTION = "com.antest1.kcasniffer.widget.ACTION_TOGGLE";
+    public static final String WIDGET_SET_ACTION = "com.antest1.kcasniffer.widget.ACTION_SET";
 
     public static final Uri CONTENT_URI = Uri.parse("content://".concat(AUTHORITY).concat(PATH));
 }
