@@ -14,7 +14,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.util.Locale;
 
 import static com.antest1.kcasniffer.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcasniffer.KcaConstants.VPN_STOP_REASON;
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     ToggleButton vpnbtn;
+    TextView version;
     SharedPreferences prefs;
 
     @Override
@@ -66,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
                 sendBroadcast(toggleIntent);
             }
         });
+
+        version = findViewById(R.id.app_version);
+        version.setText(String.format(Locale.US, "%s %s\n%s", getString(R.string.app_name), BuildConfig.VERSION_NAME, getString(R.string.project_github)));
     }
 
     @Override

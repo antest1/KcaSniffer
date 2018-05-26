@@ -51,6 +51,20 @@
                 android:textOff="@string/ma_vpn_toggleoff"
                 android:textOn="@string/ma_vpn_toggleon" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/app_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:autoLink="web"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
         </LinearLayout>
 
 

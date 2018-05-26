@@ -17,6 +17,6 @@
     <string name="menu_socks5_password">SOCKS5 Password (optional)</string>
     <string name="menu_bypass_address">Bypass Addresses</string>
     <string name="menu_bypass_address_desc">Use CIDR to describe bypass addresses, separate each CIDR by a comma.</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
+
+    <string name="project_github" formatted="false">https://github.com/antest1/KcaSniffer</string>
 </resources>
