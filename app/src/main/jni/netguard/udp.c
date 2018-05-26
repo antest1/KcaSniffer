@@ -345,7 +345,7 @@ jboolean handle_udp(const struct arguments *args,
                             args, version, IPPROTO_UDP, "",
                             source, ntohs(cur->udp.source), dest, ntohs(cur->udp.dest),
                             name, 0, 0);
-                    log_packet(args, objPacket);
+                    //log_packet(args, objPacket);
 
                     // Session done
                     cur->udp.state = UDP_FINISHING;

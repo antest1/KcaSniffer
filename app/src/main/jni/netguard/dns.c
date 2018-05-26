@@ -153,7 +153,7 @@ void parse_dns_response(const struct arguments *args, const struct udp_session *
             }
         }
 
-        if (qcount > 0 && is_domain_blocked(args, qname)) {
+        if (qcount > 0) {
             dns->qr = 1;
             dns->aa = 0;
             dns->tc = 0;
@@ -186,7 +186,7 @@ void parse_dns_response(const struct arguments *args, const struct udp_session *
                     args, u->version, IPPROTO_UDP, "",
                     source, ntohs(u->source), dest, ntohs(u->dest),
                     name, 0, 0);
-            log_packet(args, objPacket);
+            //log_packet(args, objPacket);
         }
     }
     else if (acount > 0)
@@ -230,8 +230,7 @@ int check_domain(const struct arguments *args, const struct udp_session *u,
                  uint16_t qclass, uint16_t qtype, const char *name) {
 
     if (qclass == DNS_QCLASS_IN &&
-        (qtype == DNS_QTYPE_A || qtype == DNS_QTYPE_AAAA) &&
-        is_domain_blocked(args, name)) {
+        (qtype == DNS_QTYPE_A || qtype == DNS_QTYPE_AAAA)) {
 
         log_android(ANDROID_LOG_INFO, "DNS query type %d name %s blocked", qtype, name);
 

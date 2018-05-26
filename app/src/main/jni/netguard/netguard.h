@@ -488,8 +488,6 @@ void log_packet(const struct arguments *args, jobject jpacket);
 void dns_resolved(const struct arguments *args,
                   const char *qname, const char *aname, const char *resource, int ttl);
 
-jboolean is_domain_blocked(const struct arguments *args, const char *name);
-
 struct allowed *is_address_allowed(const struct arguments *args, jobject objPacket);
 
 jobject create_packet(const struct arguments *args,

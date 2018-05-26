@@ -590,41 +590,6 @@ void dns_resolved(const struct arguments *args,
 #endif
 }
 
-static jmethodID midIsDomainBlocked = NULL;
-
-jboolean is_domain_blocked(const struct arguments *args, const char *name) {
-#ifdef PROFILE_JNI
-    float mselapsed;
-    struct timeval start, end;
-    gettimeofday(&start, NULL);
-#endif
-
-    jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
-
-    const char *signature = "(Ljava/lang/String;)Z";
-    if (midIsDomainBlocked == NULL)
-        midIsDomainBlocked = jniGetMethodID(args->env, clsService, "isDomainBlocked", signature);
-
-    jstring jname = (*args->env)->NewStringUTF(args->env, name);
-
-    jboolean jallowed = (*args->env)->CallBooleanMethod(
-            args->env, args->instance, midIsDomainBlocked, jname);
-    jniCheckException(args->env);
-
-    (*args->env)->DeleteLocalRef(args->env, jname);
-    (*args->env)->DeleteLocalRef(args->env, clsService);
-
-#ifdef PROFILE_JNI
-    gettimeofday(&end, NULL);
-    mselapsed = (end.tv_sec - start.tv_sec) * 1000.0 +
-                (end.tv_usec - start.tv_usec) / 1000.0;
-    if (mselapsed > PROFILE_JNI)
-        log_android(ANDROID_LOG_WARN, "is_domain_blocked %f", mselapsed);
-#endif
-
-    return jallowed;
-}
-
 static jmethodID midIsAddressAllowed = NULL;
 jfieldID fidRaddr = NULL;
 jfieldID fidRport = NULL;
