@@ -89,10 +89,12 @@ public class KcaSnifferWidget extends AppWidgetProvider {
                         KcaVpnService.start("prepared", context);
                         Intent dsIntent = new Intent(context, KcaDataService.class);
                         context.startService(dsIntent);
+                        prefs.edit().putBoolean(PREF_VPN_ENABLED, true).apply();
                     } else {
-                        context.startActivity(prepare);
+                        Toast.makeText(context, context.getString(R.string.widget_vpn_prepare_needed), Toast.LENGTH_LONG).show();
+                        return;
                     }
-                    prefs.edit().putBoolean(PREF_VPN_ENABLED, true).apply();
+
                 } catch (Throwable ex) {
                     // Prepare failed
                     Log.e("KCA", ex.toString() + "\n" + Log.getStackTraceString(ex));

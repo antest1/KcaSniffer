@@ -6,6 +6,7 @@
 
     <string name="ma_vpn_toggleon">Sniffer On</string>
     <string name="ma_vpn_toggleoff">Sniffer Off</string>
+    <string name="widget_vpn_prepare_needed">You must accept VPN connection from the application.</string>
 
     <string name="menu_socks5_title">SOCKS5 Proxy Settings</string>
     <string name="menu_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>
