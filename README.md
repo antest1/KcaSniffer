@@ -10,11 +10,9 @@ This project is an open-source sniffer to capture request/response packets from 
 Since Android system only allows one VpnService, there was a difficulty to use multiple applications which need to get real-time kancolle data. 
 So, this project aims to support real-time data to multiple 3rd-party kancolle tools,
 and enables other developers to make various kancolle-related applications (like viewers, material logger, etc)
-without knowledge of android system or network implementation details.
+without knowledge of android system or network-related implementation details.
 
 ※ This application is under development. The data specification may be different after some updates.  
-※ The icon is temporal generated in [Here](https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html).
-I'll update it as available.
 
 Requirement
 -------
