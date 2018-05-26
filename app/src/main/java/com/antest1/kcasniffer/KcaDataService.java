@@ -31,7 +31,6 @@ public class KcaDataService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(getApplicationContext(), "RUN", Toast.LENGTH_LONG).show();
         handler = new KcaDataServiceHandler(this);
         packet_db = new KcaPacketStore(getApplicationContext(), null, PACKETSTORE_VERSION);
         KcaVpnData.setHandler(handler);

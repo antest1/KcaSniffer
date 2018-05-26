@@ -26,6 +26,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.os.Process;
 
+import com.antest1.kcasniffer.R;
+
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -39,15 +41,14 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
-import eu.faircode.netguard.Allowed;
 import eu.faircode.netguard.IPUtil;
 import eu.faircode.netguard.Packet;
 import eu.faircode.netguard.ResourceRecord;
 import eu.faircode.netguard.Rule;
 import eu.faircode.netguard.Util;
 
+import static com.antest1.kcasniffer.KcaConstants.DMMLOGIN_PACKAGE_NAME;
 import static com.antest1.kcasniffer.KcaConstants.KC_PACKAGE_NAME;
-import static com.antest1.kcasniffer.KcaConstants.PREF_VPN_ENABLED;
 import static com.antest1.kcasniffer.KcaConstants.VPN_STOP_REASON;
 
 public class KcaVpnService extends VpnService {
@@ -215,7 +216,7 @@ public class KcaVpnService extends VpnService {
                         // Retried on connectivity change
                     } else {
                         //
-                        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+                        prefs.edit().putBoolean("enabled", false).apply();
                     }
                 } else {
                     Log.w(TAG, ex.toString());
@@ -324,7 +325,7 @@ public class KcaVpnService extends VpnService {
         //getLock(this).acquire();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean enabled = prefs.getBoolean(PREF_VPN_ENABLED, false);
+        boolean enabled = prefs.getBoolean("enabled", false);
 
         if (intent != null && intent.hasExtra(EXTRA_REASON)) {
             String reason = intent.getStringExtra(EXTRA_REASON);
@@ -378,7 +379,7 @@ public class KcaVpnService extends VpnService {
     public void onRevoke() {
         Log.i(TAG, "Revoke");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+        prefs.edit().putBoolean("enabled", false).apply();
         super.onRevoke();
     }
 
@@ -391,13 +392,20 @@ public class KcaVpnService extends VpnService {
         boolean filter = prefs.getBoolean("filter", false);
         boolean system = prefs.getBoolean("manage_system", false);
 
+        boolean socks5_enable = prefs.getBoolean("socks5_enable", false);
+        boolean socks5_onlykc = prefs.getBoolean("socks5_onlykc", false);
+
         // Build VPN service
         Builder builder = new Builder();
         builder.setSession(getString(R.string.app_vpn_name));
-
         if (Build.VERSION.SDK_INT >= 21) {
             try {
-                builder.addAllowedApplication(KC_PACKAGE_NAME);
+                if (socks5_enable && socks5_onlykc) {
+                    builder.addAllowedApplication(KC_PACKAGE_NAME);
+                    builder.addAllowedApplication(DMMLOGIN_PACKAGE_NAME);
+                } else if (!socks5_enable) {
+                    builder.addAllowedApplication(KC_PACKAGE_NAME);
+                }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
@@ -573,15 +581,21 @@ public class KcaVpnService extends VpnService {
         int prio = Log.ERROR;
         int rcode = 3;
         SharedPreferences prefs = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        boolean enable = prefs.getBoolean("socks5_enable", false);
         String addr = prefs.getString("socks5_address", "");
         String portNum = prefs.getString("socks5_port", "0");
+        String username = prefs.getString("socks5_name", "");
+        String password = prefs.getString("socks5_pass", "");
         int port = 0;
         if (!portNum.equals(""))
             port = Integer.parseInt(portNum);
-        if (addr.equals("") || port == 0)
+        if (enable && !(addr.equals("") || port == 0)) {
+            Log.i(TAG, String.format("Proxy enabled, with address %s and port %d (id %s / pw %s)", addr, port, username, password));
+            jni_socks5(addr, port, username, password);
+        } else {
+            Log.i(TAG, "Proxy disabled");
             jni_socks5("", 0, "", "");
-        else
-            jni_socks5(addr, port, "", "");
+        }
         jni_start(vpn.getFd(), true, rcode, prio);
     }
 
@@ -616,26 +630,13 @@ public class KcaVpnService extends VpnService {
             Log.e(TAG, reason);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            prefs.edit().putBoolean(PREF_VPN_ENABLED, false).apply();
+            prefs.edit().putBoolean("enabled", false).apply();
         }
     }
 
     // Called from native code
     private void nativeError(int error, String message) {
         Log.w(TAG, "Native error " + error + ": " + message);
-    }
-
-    // Called from native code
-    private void logPacket(Packet packet) {
-        Log.e("KCAV", packet.data);
-        /*
-        Message msg = logHandler.obtainMessage();
-        msg.obj = packet;
-        msg.what = MSG_PACKET;
-        msg.arg1 = (last_connected ? (last_metered ? 2 : 1) : 0);
-        msg.arg2 = (last_interactive ? 1 : 0);
-        logHandler.sendMessage(msg);
-        */
     }
 
     // Called from native code
@@ -647,32 +648,11 @@ public class KcaVpnService extends VpnService {
         }*/
     }
 
-    // Called from native code
-    private boolean isDomainBlocked(String name) {
-        /*
-        lock.readLock().lock();
-        boolean blocked = (mapHostsBlocked.containsKey(name) && mapHostsBlocked.get(name));
-        lock.readLock().unlock();
-        return blocked;
-        */
-        return false;
-    }
-
     private boolean isSupported(int protocol) {
         return (protocol == 1 /* ICMPv4 */ ||
                 protocol == 59 /* ICMPv6 */ ||
                 protocol == 6 /* TCP */ ||
                 protocol == 17 /* UDP */);
-    }
-
-    // Called from native code
-    private Allowed isAddressAllowed(Packet packet) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        //lock.readLock().lock();
-
-        Allowed allowed = new Allowed();
-        return allowed;
     }
 
     private BroadcastReceiver interactiveStateReceiver = new BroadcastReceiver() {
@@ -757,7 +737,7 @@ public class KcaVpnService extends VpnService {
 
     public static void reload(String reason, Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.getBoolean(PREF_VPN_ENABLED, false)) {
+        if (prefs.getBoolean("enabled", false)) {
             Intent intent = new Intent(context, KcaVpnService.class);
             intent.putExtra(EXTRA_COMMAND, Command.reload);
             intent.putExtra(EXTRA_REASON, reason);

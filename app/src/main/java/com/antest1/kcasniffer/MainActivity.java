@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
@@ -59,6 +61,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setVpnBtn();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setVpnBtn();
+    }
+
+    public void setVpnBtn() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        vpnbtn.setChecked(prefs.getBoolean(PREF_VPN_ENABLED, false));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_socks5) {
+            startActivity(new Intent(this, NetworkSettingActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {

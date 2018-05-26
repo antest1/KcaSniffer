@@ -2,8 +2,21 @@
     <string name="app_name">KcaSniffer</string>
     <string name="app_vpn_name">KcaSniffer VPN</string>
 
+    <string name="action_socks5">SOCKS5</string>
+
     <string name="ma_vpn_toggleon">Sniffer On</string>
     <string name="ma_vpn_toggleoff">Sniffer Off</string>
     <string name="ma_svc_toggleon">Service On</string>
     <string name="ma_svc_toggleoff">Service Off</string>
+
+    <string name="menu_socks5_title">SOCKS5 Proxy Settings</string>
+    <string name="menu_warn_adv_network">Warning: Setting these incorrectly may make VPN Service unusable. Don\'t change these options unless you know what you are doing! You need to restart VPN Service to make these options effective.</string>
+    <string name="menu_socks5_enable">Enable SOCKS5 Proxy</string>
+    <string name="menu_socks5_onlykc">Apply for only Kancolle/DMM Login</string>
+    <string name="menu_socks5_address">SOCKS5 Proxy Address</string>
+    <string name="menu_socks5_port">SOCKS5 Proxy Port</string>
+    <string name="menu_socks5_username">SOCKS5 Username (optional)</string>
+    <string name="menu_socks5_password">SOCKS5 Password (optional)</string>
+    <string name="menu_bypass_address">Bypass Addresses</string>
+    <string name="menu_bypass_address_desc">Use CIDR to describe bypass addresses, separate each CIDR by a comma.</string>
 </resources>

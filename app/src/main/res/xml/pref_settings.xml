@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:selectable="false"
+        android:persistent="false"
+        android:title=""
+        android:summary="@string/menu_warn_adv_network" />
+    <CheckBoxPreference
+        android:key="socks5_enable"
+        android:title="@string/menu_socks5_enable" />
+    <CheckBoxPreference
+        android:key="socks5_onlykc"
+        android:dependency="socks5_enable"
+        android:title="@string/menu_socks5_onlykc" />
+    <EditTextPreference
+        android:key="socks5_address"
+        android:dependency="socks5_enable"
+        android:title="@string/menu_socks5_address" />
+    <EditTextPreference
+        android:key="socks5_port"
+        android:dependency="socks5_enable"
+        android:inputType="numberDecimal"
+        android:title="@string/menu_socks5_port" />
+    <EditTextPreference
+        android:key="socks5_name"
+        android:dependency="socks5_enable"
+        android:title="@string/menu_socks5_username" />
+    <EditTextPreference
+        android:dependency="socks5_enable"
+        android:inputType="textPassword"
+        android:key="socks5_pass"
+        android:title="@string/menu_socks5_password" />
+    <EditTextPreference
+        android:key="bypass_address"
+        android:dependency="socks5_enable"
+        android:title="@string/menu_bypass_address"
+        android:summary="@string/menu_bypass_address_desc" />
+</PreferenceScreen>
