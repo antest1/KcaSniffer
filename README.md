@@ -1,6 +1,5 @@
-# KcaSniffer
+# KcaSniffer (Deprecated)
 
-<img src="https://upload.cc/i1/2018/05/07/fMQrXm.png" width="256"/>
 VpnService-based Common Sniffer Tool for Kancolle Android
 
 About Project
